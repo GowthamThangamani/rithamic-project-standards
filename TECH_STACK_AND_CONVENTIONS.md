@@ -8,7 +8,7 @@ This document establishes the official technical stack, architectural standards,
 
 ### A. Backend Services
 - **Runtime**: Node.js (Active LTS).
-- **Language**: TypeScript 5.x (Strict mode enabled).
+- **Language**: TypeScript 5.x (Strict mode enabled, `noImplicitAny: true`).
 - **Framework**: Express 5.x.
 - **Validation**: Zod (100% of request payloads and environment variables).
 - **Security**: Helmet security middleware, rate limiting.
@@ -16,13 +16,17 @@ This document establishes the official technical stack, architectural standards,
 - **Dev Runner**: `tsx` for zero-config hot-reloading development.
 
 ### B. Frontend Applications
-- **Web Applications**: HTML5, Vanilla CSS / Modern CSS, JavaScript/TypeScript.
-- **Complex Dynamic SPAs**: Next.js or Vite (when explicitly warranted).
+- **Language**: **TypeScript 5.x** (Strict mode enabled across all frontend apps).
+- **Build Tool / Dev Server**: **Vite** (`npm run dev`, `npm run build` with `tsc && vite build`).
+- **Architecture**:
+  - `src/types/index.ts`: Strongly typed domain models, user roles, API response envelopes.
+  - `src/config/index.ts`: Central API and SSO URL resolvers.
+  - `src/services/`: Modular typed services (`authService.ts`, `telemetryService.ts`, `dataService.ts`).
 - **CSS / Styling**:
-  - Prefer clean Vanilla CSS or tailored component design systems.
-  - Avoid generic plain colors; use curated harmonious palettes (Slate `#1e293b`, Royal Blue `#2563eb`, Emerald `#10b981`, Light Slate `#f8fafc`).
+  - Clean Vanilla CSS with curated CSS variables and design tokens.
+  - Curated palettes (Slate, Royal Blue, Emerald, Warm Gold).
   - Google Fonts typography (`Inter`, `Outfit`, `Plus Jakarta Sans`).
-  - Glassmorphism, smooth gradients, and subtle micro-animations.
+  - Glassmorphism, smooth gradients, subtle micro-animations.
   - Zero placeholder images.
 
 ### C. Database Architecture
@@ -42,6 +46,8 @@ This document establishes the official technical stack, architectural standards,
    `allowed_origins` stored in PostgreSQL per project.
 4. **Token Security**:
    JWT Bearer tokens must be cryptographically signed with `JWT_SECRET` and include expiration dates.
+5. **Cross-App Single Sign-On (SSO)**:
+   Use 60-second single-use cryptographic SSO exchange tickets.
 
 ---
 
